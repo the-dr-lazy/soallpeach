@@ -1,11 +1,9 @@
-FROM nixos/nix
-MAINTAINER Mohammad Hasani <thebrodmann@protonmail.com>
-
-RUN nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
-RUN nix-channel --update
+FROM haskell:8.8.3
 
 COPY . .
 
-RUN nix-build -A production
+RUN cabal new-update
+RUN cabal new-build --ghc-options="-O2"
+RUN cabal new-install
 
-ENTRYPOINT ["./result/bin/prime"]
+ENTRYPOINT ["prime"]
