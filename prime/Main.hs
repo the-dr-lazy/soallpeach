@@ -12,6 +12,7 @@ import           System.Environment
 
 isqrt :: Integral a => a -> a
 isqrt = floor @Double . sqrt . fromIntegral
+{-# INLINE isqrt #-}
 
 factors :: Integral a => a -> [a]
 factors n = [ x | x <- [3,5..isqrt n], n `mod` x == 0]
