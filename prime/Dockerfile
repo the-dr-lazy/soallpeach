@@ -1,5 +1,8 @@
 FROM haskell:8.8.3
 
+RUN apt-get update
+RUN apt-get install lzma bzip2
+
 RUN mkdir -p /opt/prime
 WORKDIR /opt/prime
 
