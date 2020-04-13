@@ -21,6 +21,7 @@ executable prime
   default-extensions:  OverloadedStrings
                        TypeApplications
                        NoImplicitPrelude
+                       BangPatterns
   build-depends:       base >=4.12 && <5
                      , text
                      , attoparsec
