@@ -16,7 +16,7 @@ jobs:
       run: nix-build -A production
       working-directory: ./prime
     - name: Benchmark
-      run: time ./result/bin/prime ./input.txt +RTS -N2
+      run: time ./result/bin/prime ./input.txt +RTS -N2 > /dev/null
       working-directory: ./prime
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
