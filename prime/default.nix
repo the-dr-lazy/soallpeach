@@ -16,5 +16,5 @@ let
 in
 with pkgs.haskell.lib; {
   development = disableOptimization prime;
-  production  = failOnAllWarnings (appendConfigureFlag prime "--ghc-options=-O2 --ghc-options=-threaded --ghc-options=-rtsopts");
+  production  = failOnAllWarnings (appendConfigureFlag prime "--ghc-options=-O3 --ghc-options=-threaded --ghc-options=-rtsopts");
 }

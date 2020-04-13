@@ -46,7 +46,7 @@ main = do
     $  C.sourceFile filePath
     .| C.decodeUtf8
     .| C.linesUnbounded
-    .| C.conduitVector 250000
+    .| C.conduitVector 5000
     .| asyncMapC 3 (V.map $ output . parseIntegral)
     .| C.concat
     .| C.unlines
