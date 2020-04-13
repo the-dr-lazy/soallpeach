@@ -10,6 +10,8 @@ import           Data.Int
 import           Data.Text                      ( Text )
 import           Prelude
 import           System.Environment
+import Data.Conduit.Algorithms.Async (asyncMapC)
+import qualified Data.Vector as V
 
 -- | Main logic
 
@@ -44,7 +46,9 @@ main = do
     $  C.sourceFile filePath
     .| C.decodeUtf8
     .| C.linesUnbounded
-    .| C.map (output . parseIntegral)
+    .| C.conduitVector 500000
+    .| asyncMapC 2 (V.map $ output . parseIntegral)
+    .| C.concat
     .| C.unlines
     .| C.encodeUtf8
     .| C.stdout
