@@ -1,6 +1,7 @@
+{ system ? builtins.currentSystem }:
 let
   config = {
-    packageOverrides = pkgs: rec {
+    packageOverrides = pkgs: {
       haskellPackages = pkgs.haskell.packages.ghc883.override {
         overrides = self: super: {
           prime = super.callCabal2nix "prime" ./. {};
@@ -9,9 +10,9 @@ let
     };
   };
 
-  pkgs = import <nixpkgs> { inherit config; };
+  pkgs = import <nixpkgs> { inherit config; inherit system; };
 
-  prime =  pkgs.haskellPackages.prime;
+  prime = pkgs.haskellPackages.prime;
 in
 with pkgs.haskell.lib; {
   development = disableOptimization prime;
