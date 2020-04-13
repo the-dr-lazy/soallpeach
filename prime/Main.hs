@@ -10,8 +10,9 @@ import           Data.Int
 import           Data.Text                      ( Text )
 import           Prelude
 import           System.Environment
-import Data.Conduit.Algorithms.Async (asyncMapC)
-import qualified Data.Vector as V
+import           Data.Conduit.Algorithms.Async  ( asyncMapC )
+import qualified Data.Vector                   as V
+import           Control.Concurrent
 
 -- | Main logic
 
@@ -41,13 +42,14 @@ parseIntegral = parseOnly decimal
 
 main :: IO ()
 main = do
+  threads  <- getNumCapabilities
   filePath <- head <$> getArgs
   runConduitRes
     $  C.sourceFile filePath
     .| C.decodeUtf8
     .| C.linesUnbounded
-    .| C.conduitVector 5000
-    .| asyncMapC 3 (V.map $ output . parseIntegral)
+    .| C.conduitVector 4096
+    .| asyncMapC threads (V.map $ output . parseIntegral)
     .| C.concat
     .| C.unlines
     .| C.encodeUtf8

@@ -10,7 +10,7 @@ RUN cabal new-build --dependencies-only
 
 COPY . .
 
-RUN cabal new-build --ghc-options="-O2"
+RUN cabal new-build --ghc-options="-O3" --ghc-options="-threaded" --ghc-options="-rtsopts" --ghc-options="-with-rtsopts=-N"
 RUN cabal new-install
 
 ENTRYPOINT ["prime"]
