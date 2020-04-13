@@ -1,0 +1,23 @@
+name: Haskell CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  prime:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./prime
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v7
+    - name: Build
+      run: nix-build -A production
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: prime
+        path: ./result/bin/prime
