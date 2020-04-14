@@ -1,20 +1,38 @@
-{ system ? builtins.currentSystem }:
+{ pkgs ? import <nixpkgs> { }, compiler ? "ghc881"
+, haskellPackages ? pkgs.haskell.packages.${compiler} }:
 let
-  config = {
-    packageOverrides = pkgs: {
-      haskellPackages = pkgs.haskell.packages.ghc883.override {
-        overrides = self: super: {
-          prime = super.callCabal2nix "prime" ./. {};
-        };
-      };
+  prime = { mkDerivation, attoparsec, base, bzip2, conduit, conduit-algorithms
+    , conduit-extra, lzma, stdenv, text, vector }:
+    mkDerivation {
+      pname = "prime";
+      version = "0.1.0.0";
+      src = ./.;
+      isLibrary = false;
+      isExecutable = true;
+      executableHaskellDepends = [
+        attoparsec
+        base
+        conduit
+        conduit-algorithms
+        conduit-extra
+        text
+        vector
+      ];
+      executableSystemDepends = [ bzip2 lzma ];
+      description = "Haskell primality test algorithm for soallpeach";
+      license = stdenv.lib.licenses.gpl3;
     };
-  };
 
-  pkgs = import <nixpkgs> { inherit config; inherit system; };
+  overrides = self: super: { prime = super.callPackage prime {}; };
 
-  prime = pkgs.haskellPackages.prime;
-in
-with pkgs.haskell.lib; {
-  development = disableOptimization prime;
-  production  = failOnAllWarnings (appendConfigureFlag prime "--ghc-options=-O3 --ghc-options=-threaded --ghc-options=-rtsopts");
+  haskellPackages' = haskellPackages.extend overrides;
+in with pkgs.haskell.lib; {
+  development = disableOptimization haskellPackages'.prime;
+  production = appendConfigureFlags haskellPackages'.prime [
+    "--ghc-option=-Werror"
+    "--ghc-option=-O3"
+    "--ghc-option=-threaded"
+    "--ghc-option=-rtsopts"
+    "--ghc-option=-with-rtsopts=-N"
+  ];
 }

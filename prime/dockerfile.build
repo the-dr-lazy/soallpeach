@@ -6,19 +6,20 @@ RUN apt-get install -y liblzma-dev libbz2-dev
 RUN mkdir -p /opt/prime
 WORKDIR /opt/prime
 
-COPY *.cabal ./
-
 RUN cabal new-update
-RUN cabal new-build --dependencies-only
 
 COPY . .
 
+RUN cabal new-install --dependencies-only
+
 RUN cabal new-build \
-  -j4 \
   --ghc-options="-O3" \
   --ghc-options="-threaded" \
   --ghc-options="-rtsopts" \
-  --ghc-options="-with-rtsopts=-N"
+  --ghc-options="-with-rtsopts=-N" \
+  --ghc-options="-fPIC" \
+  --ghc-options="-fllvm" \
+  --ghc-options="-split-objs"
 RUN cabal new-install
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["prime"]
