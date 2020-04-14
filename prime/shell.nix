@@ -5,9 +5,4 @@ mkShell {
   inputFrom = [
     prime.development.env
   ];
-  buildInputs = [
-    zlib
-    lzma
-    bzip2
-  ];
 }
