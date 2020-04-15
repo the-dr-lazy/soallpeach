@@ -1,0 +1,37 @@
+version: 2.1
+jobs:
+  prime-build-static:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - checkout
+      - run:
+          name: Install Nix
+          command: ../scripts/install-nix.sh
+      - run:
+          name: Install Cachix
+          command: |
+            nix-env -iA cachix -f https://cachix.org/api/v1/install
+            cachix use static-haskell-nix
+            cachix use soallpeach
+      - run:
+          name: Build
+          command: |
+            nix-build static.nix -A env | cachix push soallpeach
+            nix-build statix.nix        | cachix push soallpeach
+          working_directory: ./prime
+      - run:
+          name: Assertion
+          command: ldd ./result/bin/prime
+          working_directory: ./prime
+      - run:
+          name: Benchmark
+          command: time ./result/bin/prime ./input.txt > ./result.txt
+          working_directory: ./prime
+      - store_artifacts:
+          path: ./prime/result
+          
+workflows:
+  prime:
+    jobs:
+      - prime-build-static
