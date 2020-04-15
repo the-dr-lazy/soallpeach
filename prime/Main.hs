@@ -11,7 +11,6 @@ import qualified Data.Text                     as T
 import qualified Data.Text.IO                  as T
 import           Prelude
 import           System.Environment
-import Control.Parallel.Strategies
 
 -- | Utils
 
@@ -73,9 +72,12 @@ convert (Right x) | isPrimeMemo x = "1"
 main :: IO ()
 main = do
   inputFilePath <- head <$> getArgs
-  inputs <- T.lines <$> T.readFile inputFilePath
-  let outputs = fmap (convert . parseIntegral) inputs `using` parListChunk 10000 rdeepseq
-  T.putStrLn $ T.intercalate "\n" outputs
+  output        <-
+    T.intercalate "\n"
+    .   fmap (convert . parseIntegral)
+    .   T.lines
+    <$> T.readFile inputFilePath
+  T.putStrLn output
 
 -- | I/O - Streaming
 
