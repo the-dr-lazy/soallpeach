@@ -1,4 +1,5 @@
-{ pkgs ? import <nixpkgs> { }, compiler ? "ghc881"
+{ pkgs ? import <nixpkgs> { }
+, compiler ? "ghc881"
 , haskellPackages ? pkgs.haskell.packages.${compiler} }:
 let
   prime = { mkDerivation, attoparsec, base, bzip2, conduit, conduit-algorithms
@@ -12,13 +13,8 @@ let
       executableHaskellDepends = [
         attoparsec
         base
-        conduit
-        conduit-algorithms
-        conduit-extra
         text
-        vector
       ];
-      executableSystemDepends = [ bzip2 lzma ];
       description = "Haskell primality test algorithm for soallpeach";
       license = stdenv.lib.licenses.gpl3;
     };
