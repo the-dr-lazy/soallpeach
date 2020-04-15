@@ -3,7 +3,7 @@
 , haskellPackages ? pkgs.haskell.packages.${compiler} }:
 let
   prime = { mkDerivation, attoparsec, base, bzip2, conduit, conduit-algorithms
-    , conduit-extra, lzma, stdenv, text, vector }:
+    , conduit-extra, lzma, stdenv, text, vector, parallel }:
     mkDerivation {
       pname = "prime";
       version = "0.1.0.0";
@@ -14,6 +14,7 @@ let
         attoparsec
         base
         text
+        parallel
       ];
       description = "Haskell primality test algorithm for soallpeach";
       license = stdenv.lib.licenses.gpl3;
