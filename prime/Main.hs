@@ -5,15 +5,12 @@ module Main
 where
 
 import           Data.Attoparsec.Text
-import           Data.Conduit
-import qualified Data.Conduit.Combinators      as C
 import           Data.Int
 import           Data.Text                      ( Text )
+import qualified Data.Text                     as T
+import qualified Data.Text.IO                  as T
 import           Prelude
 import           System.Environment
-import           Data.Conduit.Algorithms.Async  ( asyncMapC )
-import qualified Data.Vector                   as V
-import           Control.Concurrent
 
 -- | Utils
 
@@ -42,6 +39,10 @@ isqrt :: Integral a => a -> a
 isqrt = floor @Double . sqrt . fromIntegral
 {-# INLINE isqrt #-}
 
+parseIntegral :: Text -> Either String Int32
+parseIntegral = parseOnly decimal
+{-# INLINE parseIntegral #-}
+
 -- | Main logic
 
 factors :: Integral a => a -> [a]
@@ -63,25 +64,34 @@ isPrimeMemo = index isPrimeTree
 
 -- | I/O
 
-output :: Integral a => Either String a -> Text
-output (Left _) = error "Parser error: not number input."
-output (Right x) | isPrimeMemo x = "1"
-                 | otherwise     = "0"
-
-parseIntegral :: Text -> Either String Int32
-parseIntegral = parseOnly decimal
+convert :: Integral a => Either String a -> Text
+convert (Left _) = error "Parser error: not number input."
+convert (Right x) | isPrimeMemo x = "1"
+                  | otherwise     = "0"
 
 main :: IO ()
 main = do
-  threads  <- getNumCapabilities
-  filePath <- head <$> getArgs
-  runConduitRes
-    $  C.sourceFile filePath
-    .| C.decodeUtf8
-    .| C.linesUnbounded
-    .| C.conduitVector 4096
-    .| asyncMapC threads (V.map $ output . parseIntegral)
-    .| C.concat
-    .| C.unlines
-    .| C.encodeUtf8
-    .| C.stdout
+  inputFilePath <- head <$> getArgs
+  output        <-
+    T.intercalate "\n"
+    .   fmap (convert . parseIntegral)
+    .   T.lines
+    <$> T.readFile inputFilePath
+  T.putStrLn output
+
+-- | I/O - Streaming
+
+-- main :: IO ()
+-- main = do
+--   threads  <- getNumCapabilities
+--   filePath <- head <$> getArgs
+--   runConduitRes
+--     $  C.sourceFile filePath
+--     .| C.decodeUtf8
+--     .| C.linesUnbounded
+--     .| C.conduitVector 4096
+--     .| asyncMapC threads (V.map $ convert . parseIntegral)
+--     .| C.concat
+--     .| C.unlines
+--     .| C.encodeUtf8
+--     .| C.stdout
