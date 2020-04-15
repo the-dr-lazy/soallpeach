@@ -74,7 +74,7 @@ main :: IO ()
 main = do
   inputFilePath <- head <$> getArgs
   inputs <- T.lines <$> T.readFile inputFilePath
-  let outputs = fmap (convert . parseIntegral) inputs `using` parListChunk 1000 rdeepseq
+  let outputs = fmap (convert . parseIntegral) inputs `using` parListChunk 10000 rdeepseq
   T.putStrLn $ T.intercalate "\n" outputs
 
 -- | I/O - Streaming
