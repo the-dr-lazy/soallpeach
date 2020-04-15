@@ -1,4 +1,4 @@
-name: Nix CI
+name: Prime
 
 on:
   push:
@@ -7,35 +7,35 @@ on:
     branches: [ master ]
 
 jobs:
-  # nix:
-  #   name: Nix
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: cachix/install-nix-action@v7
-  #   - name: Cachix
-  #     run: |
-  #       nix-env -iA cachix -f https://cachix.org/api/v1/install
-  #       cachix use static-haskell-nix
-  #       cachix use soallpeach
-  #   - name: Build
-  #     run: |
-  #       nix-build static.nix -A env | cachix push soallpeach
-  #       nix-build static.nix | cachix push soallpeach
-  #     working-directory: ./prime
-  #     env:
-  #       CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
-  #   - name: Benchmark
-  #     run: time ./result/bin/prime ./input.txt > ./result.txt
-  #     working-directory: ./prime
-  #   - name: Assertion
-  #     run: ldd ./result/bin/prime
-  #     working-directory: ./prime
-  #   - name: Upload artifact
-  #     uses: actions/upload-artifact@v1.0.0
-  #     with:
-  #       name: prime
-  #       path: ./prime/result/bin/prime
+  nix:
+    name: Nix
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v7
+    - name: Cachix
+      run: |
+        nix-env -iA cachix -f https://cachix.org/api/v1/install
+        cachix use static-haskell-nix
+        cachix use soallpeach
+    - name: Build
+      run: |
+        nix-build static.nix -A env | cachix push soallpeach
+        nix-build static.nix
+      working-directory: ./prime
+      env:
+        CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
+    - name: Benchmark
+      run: time ./result/bin/prime ./input.txt > ./result.txt
+      working-directory: ./prime
+    - name: Assertion
+      run: ldd ./result/bin/prime
+      working-directory: ./prime
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: prime
+        path: ./prime/result/bin/prime
 
   docker-static:
     name: Docker - Static
