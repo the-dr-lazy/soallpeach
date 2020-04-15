@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Install Nix
-          command: ../scripts/install-nix.sh
+          command: ./scripts/install-nix.sh
       - run:
           name: Install Cachix
           command: |
