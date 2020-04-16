@@ -39,7 +39,7 @@ jobs:
       run: file ./prime
       working-directory: ./prime
     - name: Benchmark
-      run: ./prime ./input.txt
+      run: time ./prime input.txt > result.txt
       working-directory: ./prime
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
