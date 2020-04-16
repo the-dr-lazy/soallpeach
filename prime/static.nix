@@ -21,6 +21,7 @@ let
     with pkgs.haskell.lib;
     appendConfigureFlags
     (disableSharedExecutables (disableSharedLibraries drv)) [
+      "--ghc-option=-fllvm"
       "--ghc-option=-optl=-static"
       "--ghc-option=-optl=-pthread"
       "--ghc-option=-split-objs"
