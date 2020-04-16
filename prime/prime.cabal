@@ -26,6 +26,7 @@ executable prime
                      , text
                      , bytestring
                      , attoparsec
+                     , arithmoi
                      -- , conduit
                      -- , conduit-extra
                      -- , conduit-algorithms

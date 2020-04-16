@@ -9,8 +9,9 @@ import           Data.ByteString                ( ByteString )
 import qualified Data.ByteString.Char8         as BS
 import           Prelude
 import           System.Environment
+import Math.NumberTheory.Primes.Testing (isPrime)
 
--- | Utils
+-- | Binary Tree
 
 data Tree a = Tree (Tree a) a (Tree a)
 
@@ -33,22 +34,7 @@ nats = go 0 1
     r  = l + s
     s' = s * 2
 
-isqrt :: Integral a => a -> a
-isqrt = floor @Double . sqrt . fromIntegral
-{-# INLINE isqrt #-}
-
--- | Main logic
-
-factors :: Int -> [Int]
-factors n = [ x | x <- [3, 5 .. isqrt n], n `mod` x == 0 ]
-
-isPrime :: Int -> Bool
-isPrime 0 = False
-isPrime 1 = False
-isPrime 2 = True
-isPrime n | n `mod` 2 == 0   = False
-          | null $ factors n = True
-          | otherwise        = False
+-- | Main Logic
 
 isPrimeTree :: Tree Bool
 isPrimeTree = fmap isPrime nats
