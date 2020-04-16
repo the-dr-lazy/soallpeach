@@ -23,6 +23,7 @@ let
     (disableSharedExecutables (disableSharedLibraries drv)) [
       "--ghc-option=-optl=-static"
       "--ghc-option=-optl=-pthread"
+      "--ghc-option=-split-objs"
       "--extra-lib-dirs=${pkgs.gmp6.override { withStatic = true; }}/lib"
       "--extra-lib-dirs=${pkgs.zlib.static}/lib"
       "--extra-lib-dirs=${
