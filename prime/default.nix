@@ -13,7 +13,6 @@ let
       executableHaskellDepends = [
         attoparsec
         base
-        text
         bytestring
         arithmoi
       ];

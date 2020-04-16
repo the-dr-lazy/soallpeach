@@ -23,7 +23,6 @@ executable prime
                        NoImplicitPrelude
                        BangPatterns
   build-depends:       base >=4.12 && <5
-                     , text
                      , bytestring
                      , attoparsec
                      , arithmoi
