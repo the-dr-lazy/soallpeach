@@ -28,13 +28,13 @@ jobs:
     - name: Assertion
       run: ldd ./result/bin/prime || true
       working-directory: ./prime
-    # - name: UPX
-    #   run: |
-    #     nix-env -iA upx -f '<nixpkgs>'
-    #     sudo mv ./result/bin/prime ./prime
-    #     sudo chmod 777 ./prime
-    #     upx --ultra-brute ./prime
-    #   working-directory: ./prime
+    - name: UPX
+      run: |
+        nix-env -iA upx -f '<nixpkgs>'
+        sudo mv ./result/bin/prime ./prime
+        sudo chmod 777 ./prime
+        upx --best ./prime
+      working-directory: ./prime
     - name: Binary Information
       run: file ./prime
       working-directory: ./prime
