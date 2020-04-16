@@ -25,25 +25,27 @@ jobs:
       working-directory: ./prime
       env:
         CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
-    - name: Benchmark
-      run: time ./result/bin/prime ./input.txt > ./result.txt
-      working-directory: ./prime
     - name: Assertion
       run: ldd ./result/bin/prime || true
       working-directory: ./prime
     - name: UPX
       run: |
         nix-env -iA upx -f '<nixpkgs>'
-        upx --best --ultra-brute ./result/bin/prime
+        sudo mv ./result/bin/prime ./prime
+        sudo chmod 777 ./prime
+        upx --ultra-brute ./prime
       working-directory: ./prime
     - name: Binary Information
-      run: file ./result/bin/prime
+      run: file ./prime
+      working-directory: ./prime
+    - name: Benchmark
+      run: time ./prime ./input.txt
       working-directory: ./prime
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: prime
-        path: ./prime/result/bin/prime
+        path: ./prime
 
   docker-static:
     name: Docker - Static
