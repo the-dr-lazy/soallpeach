@@ -62,7 +62,7 @@ isPrimeMemo = index isPrimeTree
 convert :: Maybe Int -> ByteString
 convert Nothing = error "Parser error: not number input."
 convert (Just x) | isPrimeMemo x = "1"
-                  | otherwise     = "0"
+                 | otherwise     = "0"
 
 main :: IO ()
 main = do
