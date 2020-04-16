@@ -2,8 +2,10 @@
 let
   static-haskell-nix = fetchTarball https://github.com/nh2/static-haskell-nix/archive/d1b20f35ec7d3761e59bd323bbe0cca23b3dfc82.tar.gz;
 
-  pkgs = (import "${static-haskell-nix}/nixpkgs.nix").pkgsMusl;
+  nixpkgs = fetchTarball https://github.com/NixOS/nixpkgs/archive/ddc2f887f5f4b31128e8d4a56cb524c1d36d6fd4.tar.gz;
 
+  pkgs = (import nixpkgs {}).pkgsMusl;
+    
   static-haskell-nix-servay = static-haskell-nix + "/survey/default.nix";
   survey = import static-haskell-nix-servay {
     inherit compiler pkgs;
