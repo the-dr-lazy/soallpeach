@@ -10,18 +10,15 @@ let
       src = ./.;
       isLibrary = false;
       isExecutable = true;
-      executableHaskellDepends = [
-        attoparsec
-        base
-        bytestring
-        arithmoi
-      ];
+      executableHaskellDepends = [ attoparsec base bytestring arithmoi ];
       executableSystemDepends = [ llvm ];
       description = "Haskell primality test algorithm for soallpeach";
       license = stdenv.lib.licenses.gpl3;
     };
 
-  overrides = self: super: { prime = super.callPackage prime { llvm = pkgs.llvm; }; };
+  overrides = self: super: {
+    prime = super.callPackage prime { llvm = pkgs.llvm; };
+  };
 
   haskellPackages' = haskellPackages.extend overrides;
 in with pkgs.haskell.lib; {
