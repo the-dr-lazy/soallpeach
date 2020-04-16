@@ -20,10 +20,7 @@ let
       license = stdenv.lib.licenses.gpl3;
     };
 
-  overrides = self: super: {
-    semirings = pkgs.haskell.lib.doJailbreak self.semirings;
-    prime = super.callPackage prime {};
-  };
+  overrides = self: super: { prime = super.callPackage prime {}; };
 
   haskellPackages' = haskellPackages.extend overrides;
 in with pkgs.haskell.lib; {
