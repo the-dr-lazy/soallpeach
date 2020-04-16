@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: prime
-        path: ./prime
+        path: ./prime/prime
 
   docker-static:
     name: Docker - Static
