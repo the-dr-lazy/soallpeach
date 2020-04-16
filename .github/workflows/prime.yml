@@ -29,9 +29,16 @@ jobs:
       run: time ./result/bin/prime ./input.txt > ./result.txt
       working-directory: ./prime
     - name: Assertion
-      run: ldd ./result/bin/prime
+      run: ldd ./result/bin/prime || true
       working-directory: ./prime
-      if: failure()
+    - name: UPX
+      run: |
+        nix-env -iA upx -f '<nixpkgs>'
+        upx --best --ultra-brute ./result/bin/prime
+      working-directory: ./prime
+    - name: Binary Information
+      run: file ./result/bin/prime
+      working-directory: ./prime
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
