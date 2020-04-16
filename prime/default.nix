@@ -30,7 +30,7 @@ in with pkgs.haskell.lib; {
   ];
   production = appendConfigureFlags haskellPackages'.prime [
     "--ghc-option=-Werror"
-    "--ghc-option=-O3"
+    "--ghc-option=-O2"
     "--ghc-option=-threaded"
     "--ghc-option=-rtsopts"
     "--ghc-option=-with-rtsopts=-N"
