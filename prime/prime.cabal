@@ -24,6 +24,7 @@ executable prime
                        BangPatterns
   build-depends:       base >=4.12 && <5
                      , text
+                     , bytestring
                      , attoparsec
                      -- , conduit
                      -- , conduit-extra

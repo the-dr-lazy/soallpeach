@@ -9,6 +9,8 @@ import           Data.Int
 import           Data.Text                      ( Text )
 import qualified Data.Text                     as T
 import qualified Data.Text.IO                  as T
+import           Data.ByteString                ( ByteString )
+import qualified Data.ByteString.Char8         as BS
 import           Prelude
 import           System.Environment
 
@@ -64,7 +66,7 @@ isPrimeMemo = index isPrimeTree
 
 -- | I/O
 
-convert :: Integral a => Either String a -> Text
+convert :: Integral a => Either String a -> ByteString
 convert (Left _) = error "Parser error: not number input."
 convert (Right x) | isPrimeMemo x = "1"
                   | otherwise     = "0"
@@ -73,11 +75,11 @@ main :: IO ()
 main = do
   inputFilePath <- head <$> getArgs
   output        <-
-    T.intercalate "\n"
+    BS.intercalate "\n"
     .   fmap (convert . parseIntegral)
     .   T.lines
     <$> T.readFile inputFilePath
-  T.putStrLn output
+  BS.putStrLn output
 
 -- | I/O - Streaming
 

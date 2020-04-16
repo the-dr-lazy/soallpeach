@@ -3,7 +3,7 @@
 , haskellPackages ? pkgs.haskell.packages.${compiler} }:
 let
   prime = { mkDerivation, attoparsec, base, bzip2, conduit, conduit-algorithms
-    , conduit-extra, lzma, stdenv, text, vector }:
+    , conduit-extra, lzma, stdenv, text, vector, bytestring }:
     mkDerivation {
       pname = "prime";
       version = "0.1.0.0";
@@ -14,6 +14,7 @@ let
         attoparsec
         base
         text
+        bytestring
       ];
       description = "Haskell primality test algorithm for soallpeach";
       license = stdenv.lib.licenses.gpl3;
@@ -23,7 +24,10 @@ let
 
   haskellPackages' = haskellPackages.extend overrides;
 in with pkgs.haskell.lib; {
-  development = disableOptimization haskellPackages'.prime;
+  development = appendConfigureFlags (disableOptimization haskellPackages'.prime) [
+    "--ghc-option=-threaded"
+    "--ghc-option=-rtsopts"
+  ];
   production = appendConfigureFlags haskellPackages'.prime [
     "--ghc-option=-Werror"
     "--ghc-option=-O3"
