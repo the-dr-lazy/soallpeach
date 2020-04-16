@@ -55,6 +55,7 @@ isPrimeTree = fmap isPrime nats
 
 isPrimeMemo :: Integral a => a -> Bool
 isPrimeMemo = index isPrimeTree
+{-# INLINE isPrimeMemo #-}
 
 -- | I/O
 
