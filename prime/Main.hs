@@ -4,11 +4,7 @@ module Main
   )
 where
 
-import           Data.Attoparsec.Text
 import           Data.Int
-import           Data.Text                      ( Text )
-import qualified Data.Text                     as T
-import qualified Data.Text.IO                  as T
 import           Data.ByteString                ( ByteString )
 import qualified Data.ByteString.Char8         as BS
 import           Prelude
@@ -41,16 +37,12 @@ isqrt :: Integral a => a -> a
 isqrt = floor @Double . sqrt . fromIntegral
 {-# INLINE isqrt #-}
 
-parseIntegral :: Text -> Either String Int32
-parseIntegral = parseOnly decimal
-{-# INLINE parseIntegral #-}
-
 -- | Main logic
 
-factors :: Integral a => a -> [a]
+factors :: Int -> [Int]
 factors n = [ x | x <- [3, 5 .. isqrt n], n `mod` x == 0 ]
 
-isPrime :: Int32 -> Bool
+isPrime :: Int -> Bool
 isPrime 0 = False
 isPrime 1 = False
 isPrime 2 = True
@@ -66,9 +58,9 @@ isPrimeMemo = index isPrimeTree
 
 -- | I/O
 
-convert :: Integral a => Either String a -> ByteString
-convert (Left _) = error "Parser error: not number input."
-convert (Right x) | isPrimeMemo x = "1"
+convert :: Maybe Int -> ByteString
+convert Nothing = error "Parser error: not number input."
+convert (Just x) | isPrimeMemo x = "1"
                   | otherwise     = "0"
 
 main :: IO ()
@@ -76,9 +68,9 @@ main = do
   inputFilePath <- head <$> getArgs
   output        <-
     BS.intercalate "\n"
-    .   fmap (convert . parseIntegral)
-    .   T.lines
-    <$> T.readFile inputFilePath
+    .   fmap (convert . fmap fst . BS.readInt)
+    .   BS.lines
+    <$> BS.readFile inputFilePath
   BS.putStrLn output
 
 -- | I/O - Streaming
