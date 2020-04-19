@@ -15,17 +15,17 @@ import           Data.Vector                    ( (!)
                                                 )
 import qualified Data.Vector                   as V
 
-
 -- | Main Logic
 
 nats :: Integral a => Vector a
-nats = V.enumFromN 0 99992
+nats = V.enumFromN 0 99999
 
 isPrimeVector :: Vector Bool
 isPrimeVector = fmap isPrime nats
 
 isPrimeMemo :: Int -> Bool
-isPrimeMemo = (isPrimeVector !)
+isPrimeMemo n | n > 99998 = isPrime $ fromIntegral n
+              | otherwise = isPrimeVector ! n
 {-# INLINE isPrimeMemo #-}
 
 -- | I/O
@@ -34,12 +34,13 @@ convert :: Maybe Int -> ByteString
 convert Nothing = error "Parser error: not number input."
 convert (Just x) | isPrimeMemo x = "1"
                  | otherwise     = "0"
+{-# INLINE convert #-}
 
 main :: IO ()
 main = do
   inputFilePath <- head <$> getArgs
   output        <-
-    BS.intercalate "\n"
+    BS.unlines
     .   fmap (convert . fmap fst . BS.readInt)
     .   BS.lines
     <$> BS.readFile inputFilePath
