@@ -24,14 +24,8 @@ executable prime
                        BangPatterns
   build-depends:       base >=4.12 && <5
                      , bytestring
-                     , attoparsec
                      , arithmoi
-                     -- , conduit
-                     -- , conduit-extra
-                     -- , conduit-algorithms
-                     -- , vector
-  -- extra-libraries:     lzma
-                     -- , bz2
+                     , vector
   default-language:    Haskell2010
   cc-options:          -static
   ld-options:          -static
