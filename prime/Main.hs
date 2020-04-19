@@ -40,11 +40,11 @@ main :: IO ()
 main = do
   inputFilePath <- head <$> getArgs
   output        <-
-    BS.unlines
+    BS.intercalate "\n"
     .   fmap (convert . fmap fst . BS.readInt)
     .   BS.lines
     <$> BS.readFile inputFilePath
-  BS.putStrLn output
+  BS.putStr output
 
 -- | I/O - Streaming
 
