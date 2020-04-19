@@ -26,15 +26,10 @@ in with pkgs.haskell.lib; {
   production = appendConfigureFlags haskellPackages'.prime [
     "--ghc-option=-Werror"
     "--ghc-option=-O2"
-    "--ghc-option=-threaded"
-    "--ghc-option=-rtsopts"
-    "--ghc-option=-with-rtsopts=-N"
   ];
   profile = appendConfigureFlags haskellPackages'.prime [
     "--ghc-option=-O2"
-    "--ghc-option=-threaded"
     "--ghc-option=-rtsopts"
-    "--ghc-option=-with-rtsopts=-N"
     "--ghc-option=-prof"
     "--ghc-option=-fprof-auto"
     "--ghc-option=-fforce-recomp"

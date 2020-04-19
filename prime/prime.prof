@@ -1,45 +1,45 @@
-	Sun Apr 19 09:46 2020 Time and Allocation Profiling Report  (Final)
+	Sun Apr 19 11:11 2020 Time and Allocation Profiling Report  (Final)
 
-	   prime +RTS -N -p -RTS ./input.txt
+	   prime +RTS -p -RTS ./input.txt
 
-	total time  =        0.08 secs   (338 ticks @ 1000 us, 4 processors)
-	total alloc = 581,283,600 bytes  (excludes profiling overheads)
+	total time  =        0.26 secs   (259 ticks @ 1000 us, 1 processor)
+	total alloc = 581,203,176 bytes  (excludes profiling overheads)
 
-COST CENTRE      MODULE                                         SRC                                                                 %time %alloc
+COST CENTRE  MODULE                                         SRC                                                                 %time %alloc
 
-main             Main                                           Main.hs:(39,1)-(46,20)                                               55.9   88.6
-lucasTest        Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(149,1)-(165,79)   18.6    9.2
-convert          Main                                           Main.hs:(34,1)-(36,38)                                               17.5    0.0
-millerRabinV     Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(58,1)-(60,12)      1.8    0.0
-powMod           Math.NumberTheory.Moduli.Class                 Math/NumberTheory/Moduli/Class.hs:(178,1)-(180,82)                    1.5    0.1
-isStrongFermatPP Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(82,1)-(88,41)      1.2    0.4
-isPrimeVector    Main                                           Main.hs:25:1-33                                                       1.2    0.6
+main         Main                                           Main.hs:(39,1)-(46,20)                                               56.0   88.6
+lucasTest    Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(149,1)-(165,79)   20.1    9.2
+convert      Main                                           Main.hs:(34,1)-(36,38)                                               12.4    0.0
+millerRabinV Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(58,1)-(60,12)      3.5    0.0
+jacobi       Math.NumberTheory.Moduli.Jacobi                Math/NumberTheory/Moduli/Jacobi.hs:(69,1)-(73,27)                     2.7    0.2
+powMod       Math.NumberTheory.Moduli.Class                 Math/NumberTheory/Moduli/Class.hs:(178,1)-(180,82)                    1.9    0.1
+nats         Main                                           Main.hs:22:1-26                                                       1.5    0.8
 
 
                                                                                                                                                              individual      inherited
 COST CENTRE             MODULE                                         SRC                                                                no.     entries  %time %alloc   %time %alloc
 
 MAIN                    MAIN                                           <built-in>                                                         218          0    0.0    0.0   100.0  100.0
- CAF                    Main                                           <entire-module>                                                    435          0    0.0    0.0    26.6   11.4
-  isPrimeVector         Main                                           Main.hs:25:1-33                                                    440          1    1.2    0.6    26.6   11.4
+ CAF                    Main                                           <entire-module>                                                    435          0    0.0    0.0    31.7   11.4
+  isPrimeVector         Main                                           Main.hs:25:1-33                                                    440          1    0.8    0.6    31.7   11.4
    marray#              Data.Primitive.Array                           Data/Primitive/Array.hs:92:5-11                                    453      99993    0.0    0.0     0.0    0.0
    unId                 Data.Vector.Fusion.Util                        Data/Vector/Fusion/Util.hs:25:21-24                                451      99993    0.0    0.0     0.0    0.0
    array#               Data.Primitive.Array                           Data/Primitive/Array.hs:87:5-10                                    452      99992    0.0    0.0     0.0    0.0
-   isPrime              Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(40,1)-(45,33)   455       9592    0.0    0.0    25.1   10.0
-    bailliePSW          Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:143:1-50         458       9590    0.3    0.0    23.4   10.0
-     isStrongFermatPP   Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(82,1)-(88,41)   459       9590    1.2    0.4     2.7    0.6
+   isPrime              Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(40,1)-(45,33)   455       9592    0.4    0.0    29.3   10.0
+    bailliePSW          Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:143:1-50         458       9590    0.0    0.0    25.5   10.0
+     isStrongFermatPP   Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(82,1)-(88,41)   459       9590    0.8    0.4     2.7    0.6
       modulo            Math.NumberTheory.Moduli.Class                 Math/NumberTheory/Moduli/Class.hs:(288,1)-(289,60)                 460       9590    0.0    0.1     0.0    0.1
-      powMod            Math.NumberTheory.Moduli.Class                 Math/NumberTheory/Moduli/Class.hs:(178,1)-(180,82)                 462       9590    1.5    0.1     1.5    0.1
+      powMod            Math.NumberTheory.Moduli.Class                 Math/NumberTheory/Moduli/Class.hs:(178,1)-(180,82)                 462       9590    1.9    0.1     1.9    0.1
       shiftToOddCount#  Math.NumberTheory.Utils                        Math/NumberTheory/Utils.hs:(148,1)-(149,75)                        461       9590    0.0    0.0     0.0    0.0
-     lucasTest          Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(149,1)-(165,79) 463       9590   18.6    9.2    20.4    9.4
-      jacobi            Math.NumberTheory.Moduli.Jacobi                Math/NumberTheory/Moduli/Jacobi.hs:(69,1)-(73,27)                  468      21452    0.9    0.2     0.9    0.2
+     lucasTest          Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(149,1)-(165,79) 463       9590   20.1    9.2    22.8    9.4
+      jacobi            Math.NumberTheory.Moduli.Jacobi                Math/NumberTheory/Moduli/Jacobi.hs:(69,1)-(73,27)                  468      21452    2.7    0.2     2.7    0.2
        shiftToOddCount# Math.NumberTheory.Utils                        Math/NumberTheory/Utils.hs:(148,1)-(149,75)                        469      16667    0.0    0.0     0.0    0.0
-      isPossibleSquare2 Math.NumberTheory.Powers.Squares               Math/NumberTheory/Powers/Squares.hs:(175,1)-(181,54)               464       9590    0.9    0.0     0.9    0.0
+      isPossibleSquare2 Math.NumberTheory.Powers.Squares               Math/NumberTheory/Powers/Squares.hs:(175,1)-(181,54)               464       9590    0.0    0.0     0.0    0.0
        unId             Data.Vector.Fusion.Util                        Data/Vector/Fusion/Util.hs:25:21-24                                465      12310    0.0    0.0     0.0    0.0
       shiftToOddCount#  Math.NumberTheory.Utils                        Math/NumberTheory/Utils.hs:(148,1)-(149,75)                        470       9588    0.0    0.0     0.0    0.0
-    millerRabinV        Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(58,1)-(60,12)   457       9590    1.8    0.0     1.8    0.0
+    millerRabinV        Math.NumberTheory.Primes.Testing.Probabilistic Math/NumberTheory/Primes/Testing/Probabilistic.hs:(58,1)-(60,12)   457       9590    3.5    0.0     3.5    0.0
    sSize                Data.Vector.Fusion.Bundle.Monadic              Data/Vector/Fusion/Bundle/Monadic.hs:124:30-34                     449          2    0.0    0.0     0.0    0.0
-   nats                 Main                                           Main.hs:22:1-26                                                    441          1    0.3    0.8     0.3    0.8
+   nats                 Main                                           Main.hs:22:1-26                                                    441          1    1.5    0.8     1.5    0.8
     marray#             Data.Primitive.Array                           Data/Primitive/Array.hs:92:5-11                                    446      99993    0.0    0.0     0.0    0.0
     unId                Data.Vector.Fusion.Util                        Data/Vector/Fusion/Util.hs:25:21-24                                445      99993    0.0    0.0     0.0    0.0
     sChunks             Data.Vector.Fusion.Bundle.Monadic              Data/Vector/Fusion/Bundle/Monadic.hs:122:30-36                     444          1    0.0    0.0     0.0    0.0
@@ -61,9 +61,7 @@ MAIN                    MAIN                                           <built-in
  CAF                    GHC.IO.FD                                      <entire-module>                                                    294          0    0.0    0.0     0.0    0.0
  CAF                    GHC.IO.Handle.FD                               <entire-module>                                                    292          0    0.0    0.0     0.0    0.0
  CAF                    GHC.IO.Handle.Text                             <entire-module>                                                    290          0    0.0    0.0     0.0    0.0
- CAF                    GHC.Event.Poll                                 <entire-module>                                                    237          0    0.0    0.0     0.0    0.0
- CAF                    GHC.Event.Thread                               <entire-module>                                                    236          0    0.0    0.0     0.0    0.0
- main                   Main                                           Main.hs:(39,1)-(46,20)                                             437          0   55.9   88.6    73.4   88.6
-  convert               Main                                           Main.hs:(34,1)-(36,38)                                             438    1055120   17.5    0.0    17.5    0.0
+ main                   Main                                           Main.hs:(39,1)-(46,20)                                             437          0   56.0   88.6    68.3   88.6
+  convert               Main                                           Main.hs:(34,1)-(36,38)                                             438    1055120   12.4    0.0    12.4    0.0
    unId                 Data.Vector.Fusion.Util                        Data/Vector/Fusion/Util.hs:25:21-24                                439    2110240    0.0    0.0     0.0    0.0
    array#               Data.Primitive.Array                           Data/Primitive/Array.hs:87:5-10                                    454    1055120    0.0    0.0     0.0    0.0
