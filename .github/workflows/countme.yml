@@ -20,7 +20,7 @@ jobs:
           curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
           tar -xvf vegeta-*
           chmod +x vegeta
-          mv vegeta /bin/
+          sudo mv vegeta /bin/
       - name: Cachix
         run: |
           nix-env -iA cachix -f https://cachix.org/api/v1/install
