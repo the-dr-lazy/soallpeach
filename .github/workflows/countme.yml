@@ -47,7 +47,7 @@ jobs:
         run: file ./countme
         working-directory: ./countme
       - name: Benchmark
-        run: vegeta -cpus 1 attack -rate 300 -duration=45s -targets target.list | vegeta report -type=json | jq
+        run: vegeta -cpus 1 attack -rate 300 -duration=45s -targets target.list | vegeta report -type=json
         working-directory: ./countme
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
