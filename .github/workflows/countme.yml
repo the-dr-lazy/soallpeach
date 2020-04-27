@@ -1,0 +1,56 @@
+name: Count Me
+
+on:
+  push:
+    branches: [master, next]
+  pull_request:
+    branches: [master]
+
+jobs:
+  nix:
+    name: Nix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v7
+      - name: Vegeta
+        run: |
+          mkdir vegeta
+          cd vegeta
+          curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
+          tar -xvf vegeta-*
+          chmod +x vegeta
+          sudo mv vegeta /bin/
+      - name: Cachix
+        run: |
+          nix-env -iA cachix -f https://cachix.org/api/v1/install
+          cachix use static-haskell-nix
+          cachix use soallpeach
+      - name: Build
+        run: |
+          nix-build static.nix -A env | cachix push soallpeach
+          nix-build static.nix
+        working-directory: ./countme
+        env:
+          CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
+      - name: Assertion
+        run: ldd ./result/bin/countme || true
+        working-directory: ./countme
+      - name: UPX
+        run: |
+          nix-env -iA upx -f '<nixpkgs>'
+          sudo mv ./result/bin/countme ./countme
+          sudo chmod 777 ./countme
+          upx --best ./countme
+        working-directory: ./countme
+      - name: Binary Information
+        run: file ./countme
+        working-directory: ./countme
+      - name: Benchmark
+        run: vegeta -cpus 1 attack -rate 300 -duration=45s -targets target.list | vegeta report -type=json
+        working-directory: ./countme
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: countme
+          path: ./countme/countme
