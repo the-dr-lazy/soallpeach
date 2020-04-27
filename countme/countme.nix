@@ -1,5 +1,5 @@
-{ mkDerivation, base, binary, bytestring, servant, servant-server
-, stdenv, wai, warp
+{ mkDerivation, aeson, base, bytestring, http-types, stdenv, wai
+, warp
 }:
 mkDerivation {
   pname = "countme";
@@ -8,7 +8,7 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    base binary bytestring servant servant-server wai warp
+    aeson base bytestring http-types wai warp
   ];
   description = "Haskell count me";
   license = stdenv.lib.licenses.gpl3;
