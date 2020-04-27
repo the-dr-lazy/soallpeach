@@ -13,14 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: cachix/install-nix-action@v7
-      - name: Vageta
+      - name: Vegeta
         run: |
           mkdir vegeta
           cd vegeta
           curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
           tar -xvf vegeta-*
           chmod +x vegeta
-          mv vageta /bin/
+          mv vegeta /bin/
       - name: Cachix
         run: |
           nix-env -iA cachix -f https://cachix.org/api/v1/install
