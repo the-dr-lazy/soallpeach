@@ -11,16 +11,6 @@ jobs:
     name: Nix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: cachix/install-nix-action@v7
-      - name: Vegeta
-        run: |
-          mkdir vegeta
-          cd vegeta
-          curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
-          tar -xvf vegeta-*
-          chmod +x vegeta
-          sudo mv vegeta /bin/
       - name: Cachix
         run: |
           nix-env -iA cachix -f https://cachix.org/api/v1/install
@@ -46,11 +36,29 @@ jobs:
       - name: Binary Information
         run: file ./countme
         working-directory: ./countme
-      - name: Benchmark
-        run: vegeta -cpus 1 attack -rate 300 -duration=45s -targets target.list | vegeta report -type=json
-        working-directory: ./countme
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           name: countme
           path: ./countme/countme
+  benchmark:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v7
+      - name: Vegeta
+        run: |
+          mkdir vegeta
+          cd vegeta
+          curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
+          tar -xvf vegeta-*
+          chmod +x vegeta
+          sudo mv vegeta /bin/
+      - name: Benchmark
+        run: |
+          docker build --tag countme .
+          docker run -d -p 8080:80 countme
+          timeout 60 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/count)" != "200" ]]; do sleep 1; done' || false
+          vegeta -cpus 1 attack -rate 300 -duration=45s -targets target.list | vegeta report -type=json
+        working-directory: ./countme
