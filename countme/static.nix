@@ -6,6 +6,8 @@ let
   nixpkgs = fetchTarball
     "https://github.com/NixOS/nixpkgs/archive/0c960262d159d3a884dadc3d4e4b131557dad116.tar.gz";
 
+  llvmOverlay = self: super: { llvm = self.llvm_9; };
+
   haskellOverlay = self: super: {
     haskell = super.haskell // {
       packages = super.haskell.packages // {
@@ -19,7 +21,8 @@ let
     };
   };
 
-  pkgs = (import nixpkgs { overlays = [ haskellOverlay ]; }).pkgsMusl;
+  pkgs =
+    (import nixpkgs { overlays = [ haskellOverlay llvmOverlay ]; }).pkgsMusl;
 
   static-haskell-nix-servay = static-haskell-nix + "/survey/default.nix";
   survey = import static-haskell-nix-servay {

@@ -1,13 +1,11 @@
 { pkgs ? import <nixpkgs> { }, compiler ? "ghc881"
 , haskellPackages ? pkgs.haskell.packages.${compiler} }:
 let
-  drv = import ./countme.nix;
+  countme = import ./countme.nix;
 
-  countme = drvs:
-    pkgs.haskell.lib.overrideCabal (pkgs.haskellPackages.callPackage drv { })
-    (_: { executableSystemDepends = [ pkgs.llvm ]; });
-
-  overrides = self: super: { countme = super.callPackage countme { }; };
+  overrides = self: super: {
+    countme = super.callPackage countme { llvm = pkgs.llvm; };
+  };
 
   haskellPackages' = haskellPackages.extend overrides;
 in with pkgs.haskell.lib; {
