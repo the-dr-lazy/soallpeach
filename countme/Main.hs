@@ -1,4 +1,7 @@
-module Main (main) where
+module Main
+  ( main
+  )
+where
 
 import           Prelude
 import           Network.Wai.Internal           ( Request(..) )
@@ -20,7 +23,7 @@ application ref request@Request { requestMethod = "POST" } respond = do
   case body of
     Nothing     -> error "!!!"
     Just (x, _) -> do
-      atomicModifyIORef ref (\count -> (count + x, ()))
+      modifyIORef ref (+ x)
       respond $ responseLBS status200 [] mempty
 application ref _ respond = respond . response =<< readIORef ref
 
