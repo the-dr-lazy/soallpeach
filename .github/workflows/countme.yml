@@ -57,9 +57,11 @@ jobs:
           tar -xvf vegeta-*
           chmod +x vegeta
           sudo mv vegeta /bin/
+      - name: Build Docker Image
+        run: docker build --tag countme .
+        working-directory: ./countme
       - name: Benchmark
         run: |
-          docker build --tag countme .
           docker run -d -p 8080:80 countme
           timeout 60 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/count)" != "200" ]]; do sleep 1; done' || false
           vegeta -cpus 1 attack -rate 300 -duration=45s -targets target.list | vegeta report -type=json
