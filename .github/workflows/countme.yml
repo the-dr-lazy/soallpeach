@@ -64,5 +64,5 @@ jobs:
         run: |
           docker run -d -p 8080:80 countme
           timeout 60 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/count)" != "200" ]]; do sleep 1; done' || false
-          vegeta -cpus 1 attack -rate 500 -duration=45s -targets target.list | vegeta report -type=json
+          vegeta -cpus 1 attack -rate 300 -duration=45s -targets target.list | vegeta report -type=json
         working-directory: ./countme
