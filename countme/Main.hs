@@ -14,14 +14,12 @@ import qualified Data.ByteString.Lazy.Char8    as LBS8
 
 type CounterRef = IORef Int
 
-modify :: LBS8.ByteString -> Int -> Int
-modify body = case LBS8.readInt body of
-    Nothing     -> error "!!!"
-    Just (x, _) -> (+ x)
-
 application :: CounterRef -> Application
 application ref request@Request { requestMethod = "POST" } respond = do
-  modifyIORef ref . modify =<< lazyRequestBody request
+  body <- LBS8.readInt <$> strictRequestBody request
+  case body of
+    Nothing     -> error "!!!"
+    Just (x, _) -> modifyIORef ref (+ x)
   respond $ responseLBS status200 [] mempty
 application ref _ respond =
   respond . responseLBS status200 [] . encode =<< readIORef ref

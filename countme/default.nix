@@ -16,7 +16,6 @@ in with pkgs.haskell.lib; {
     "--ghc-option=-threaded"
     "--ghc-option=-rtsopts"
     "--ghc-option=-with-rtsopts=-N"
-    "--ghc-option=-with-rtsopts=-A250M"
   ];
   profile = appendConfigureFlags haskellPackages'.countme [
     "--ghc-option=-O2"
