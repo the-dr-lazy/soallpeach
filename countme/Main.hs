@@ -11,16 +11,15 @@ import           Data.IORef
 import           Network.HTTP.Types
 import           Data.Aeson                     ( encode )
 import qualified Data.ByteString.Lazy.Char8    as LBS8
-import           Control.Concurrent
 
 type CounterRef = IORef Int
 
 application :: CounterRef -> Application
 application ref request@Request { requestMethod = "POST" } respond = do
-  body <- strictRequestBody request
-  _    <- forkIO $ case LBS8.readInt body of
+  body <- LBS8.readInt <$> strictRequestBody request
+  case body of
     Nothing     -> error "!!!"
-    Just (x, _) -> modifyIORef' ref (+ x)
+    Just (x, _) -> atomicModifyIORef ref $ \counter -> (counter + x, ())
   respond $ responseLBS status200 [] mempty
 application ref _ respond =
   respond . responseLBS status200 [] . encode =<< readIORef ref
