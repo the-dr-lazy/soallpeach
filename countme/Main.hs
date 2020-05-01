@@ -19,7 +19,7 @@ application ref request@Request { requestMethod = "POST" } respond = do
   body <- LBS8.readInt <$> strictRequestBody request
   case body of
     Nothing     -> error "!!!"
-    Just (x, _) -> atomicModifyIORef ref $ \counter -> (counter + x, ())
+    Just (x, _) -> atomicModifyIORef' ref $ \counter -> (counter + x, ())
   respond $ responseLBS status200 [] mempty
 application ref _ respond =
   respond . responseLBS status200 [] . encode =<< readIORef ref
