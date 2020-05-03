@@ -12,17 +12,38 @@ import           Network.HTTP.Types
 import           Data.Aeson                     ( encode )
 import qualified Data.ByteString.Lazy.Char8    as LBS8
 
-type CounterRef = IORef Int
+type NumberRef = IORef (Maybe Int)
+type TimesRef = IORef Int
 
-application :: CounterRef -> Application
-application ref request@Request { requestMethod = "POST" } respond = do
-  body <- LBS8.readInt <$> strictRequestBody request
-  case body of
-    Nothing     -> error "!!!"
-    Just (x, _) -> atomicModifyIORef' ref $ \counter -> (counter + x, ())
+whenNothing_ :: Applicative f => Maybe a -> f () -> f ()
+whenNothing_ Nothing m = m
+whenNothing_ _       _ = pure ()
+{-# INLINE whenNothing_ #-}
+
+whenNothingM_ :: Monad m => m (Maybe a) -> m () -> m ()
+whenNothingM_ mm action = mm >>= \m -> whenNothing_ m action
+{-# INLINE whenNothingM_ #-}
+
+modify :: Int -> (Int, ())
+modify x = (x + 1, ())
+{-# INLINE modify #-}
+
+application :: NumberRef -> TimesRef -> Application
+application numberRef timesRef request@Request { requestMethod = "POST" } respond = do
+  whenNothingM_ (readIORef numberRef) $ do
+    body <- LBS8.readInt <$> strictRequestBody request
+    case body of
+      Nothing     -> error "!!!"
+      Just (x, _) -> atomicWriteIORef numberRef $ Just x
+  atomicModifyIORef' timesRef modify
   respond $ responseLBS status200 [] mempty
-application ref _ respond =
-  respond . responseLBS status200 [] . encode =<< readIORef ref
+application numberRef timesRef _ respond = do
+  number <- maybe 0 id <$> readIORef numberRef
+  times <- readIORef timesRef
+  respond . responseLBS status200 [] $ encode (number * times)
 
 main :: IO ()
-main = run 80 <$> application =<< newIORef 0
+main = do
+  numberRef <- newIORef Nothing
+  timesRef <- newIORef 0
+  run 80 $ application numberRef timesRef
